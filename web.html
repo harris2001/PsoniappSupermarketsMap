@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Psoniapp Nearest Supermarkets</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Psoniapp Nearest Supermarkets Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
     <style>
       /* Always set the map height explicitly to define the size of the div
@@ -19,147 +19,174 @@
     </style>
   </head>
   <body>
-    <div id="map"></div>
+<div id="map"></div>
     <script>
-	// This example requires the Places library. Include the libraries=places
+      // This example requires the Places library. Include the libraries=places
 // parameter when you first load the API. For example:
-// <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
-
+// <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDGqYfrvPz_Ol1oEfbgzSkDSVWoPvZRa_g&libraries=places">
+//alert("dddd");
 var map;
 var infowindow;
+var pos;
+var pyrmont = {lat: 0,lng: 0};
 
 function initMap() {
+      /*var pyrmont = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };*/
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: pyrmont,
+    zoom: 14
+  });
+  ///////////////////////////////////
+pos = {lat: 35, lng: 33};
+  
+  infoWindow = new google.maps.InfoWindow;
+  // Try HTML5 geolocation.
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+	  //alert(pos.lat+" "+pos.lng);
+      infoWindow.setPosition(pos);
+      infoWindow.setContent('Current location');
+      infoWindow.open(map);
+      map.setCenter(pos);
+	  
+	    //alert(pos.lat+" ch "+pos.lng);
+		 if(pos.lat!=35&&pos.lng!=33){
+			r1();
+		 //alert("eeee"+pos.lat+" "+pos.lng);
+		 }
+	  
+    }, function() {
+      handleLocationError(true, infoWindow, map.getCenter());
+    });
+} else {
+    // Browser doesn't support Geolocation
+    handleLocationError(false, infoWindow, map.getCenter());
+  }
 
-	
-////////////////////////////////////////////////////
-/*alert("OOO");
-if (navigator.geolocation) {			
-navigator.geolocation.getCurrentPosition(function(position) {
-			 var pymont = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-			  };
-		  }
-else {
-*/	var pyrmont = {lat: 34.966718, lng: 33.631897};
-//}
-/////////////////////////////////////////////////////
-
-
-map = new google.maps.Map(document.getElementById('map'), {
-			center: pyrmont,
-			zoom: 10
-		  });
-		  ///////////////////////////////////
-
-		  infoWindow = new google.maps.InfoWindow;
-
-		  // Try HTML5 geolocation.
-		  if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(function(position) {
-			  pymont = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-			  };
- alert(pymont.lat);
- alert(pymont.lng);
-			  infoWindow.setPosition(pymont/**/);
-			  infoWindow.setContent('You are here!');
-			  infoWindow.open(map);
-			  map.setCenter(pymont/**/);
-			}, function() {
-			  handleLocationError(true, infoWindow, map.getCenter());
-			});
-		  } else {
-			// Browser doesn't support Geolocation
-			handleLocationError(false, infoWindow, map.getCenter());
-		  }
-
-
-var image = 'https://www.google.com/maps/vt/icon/name=assets/icons/poi/tactile/pinlet_shadow-2-medium.png,assets/icons/poi/tactile/pinlet_outline-2-medium.png,assets/icons/poi/tactile/pinlet-2-medium.png,assets/icons/poi/quantum/pinlet/shoppingcart_pinlet-2-medium.png&highlight=ff000000,ffffff,db4437,ffffff&color=ff000000?scale=1';
-		  infowindow = new google.maps.InfoWindow();
-		  var service = new google.maps.places.PlacesService(map);
-		  service.nearbySearch({
-			location: pyrmont,
-			radius: 10000,
-			type: ['bakery'],
-			icon: image
-		  }, callback);
-
-		  infowindow = new google.maps.InfoWindow();
-		  var service = new google.maps.places.PlacesService(map);
-		  service.nearbySearch({
-			location: pyrmont,
-			radius: 10000,
-			type: ['supermarket'],
-			icon: image
-		  }, callback);
-      
-      infowindow = new google.maps.InfoWindow();
-		  var service = new google.maps.places.PlacesService(map);
-		  service.nearbySearch({
-			location: pyrmont,
-			radius: 10000,
-			keyword: 'supermarket co ltd',
-      icon: image
-		  }, callback);
-		}
-
-    
-    
-//Supermarket Co Ltd
-		function handleLocationError(browserHasGeolocation, infoWindow, pymont/**/) {
-		  infoWindow.setPosition(pymont/**/);
-		  infoWindow.setContent(browserHasGeolocation ?
-			'Error: The Geolocation service failed.' :
-			'Error: Your browser doesn\'t support geolocation.');
-		  infoWindow.open(map);
-		}
-
-
-function callback(results, status) {
-alert("ok");
+  ///////////////////////////////////
+}
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+  infoWindow.setPosition(pos);
+  infoWindow.setContent(browserHasGeolocation ?
+                        'Error: The Geolocation service failed.' :
+                        'Error: Your browser doesn\'t support geolocation.');
+  infoWindow.open(map);
+}
+ function r1(){
+	 infowindow = new google.maps.InfoWindow();
+	  var service = new google.maps.places.PlacesService(map);
+	  service.nearbySearch({
+		location: pos,
+		radius: 10000,
+		type: ['bakery']
+	  }, callback1);
+ }
+ function r2(){
+	  infowindow = new google.maps.InfoWindow();
+	  var service = new google.maps.places.PlacesService(map);
+	  service.nearbySearch({
+		location: pos,
+		radius: 10000,
+		type: ['supermarket']
+	  }, callback2);
+ }
+ function r3(){
+	  infowindow = new google.maps.InfoWindow();
+	  var service = new google.maps.places.PlacesService(map);
+	  service.nearbySearch({
+		location: pos,
+		radius: 10000,
+		keyword: 'supermarket Co Ltd',
+	  }, callback3);
+}
+function callback1(results, status) {
+  //alert("OK111111");
   if (status === google.maps.places.PlacesServiceStatus.OK) {
-  	for (var i = 0; i < results.length; i++) {
-				 check(results[i],i);
+    for( var i = 0; i < results.length; i++){
+		check1(results[i],i);
+	}
+	r2();
+		for (var i = 0; i < results.length; i++) {
+		  createMarker(results[i],i,1);
 		}
-    for (var i = 0; i < results.length; i++) {
-      createMarker(results[i],i);
-    }
+	
   }
 }
-
-
-		var ii,iii;
-		var minn = 9999999999999;
-  
-		function check(place,indx,w) {
-			 //alert("ss");
- var dist=Math.sqrt(((place.geometry.location.lng()-pymont/**/.lng)*(place.geometry.location.lng()-pymont/**/.lng))+((place.geometry.location.lat()-pymont/**/.lat)*(place.geometry.location.lat()-pymont/**/.lat)));
-			  
-        if(dist<minn){
-				minn=dist
-				ii=indx;
-        iii=w;
-        alert(ii);
-			  }
-        //alert(minn);
+function callback2(results, status) {
+  //alert("OK22222222222");
+  if (status === google.maps.places.PlacesServiceStatus.OK) {
+    for( var i = 0; i < results.length; i++){
+		check2(results[i],i);
+	}
+	r3();
+	for (var i = 0; i < results.length; i++) {
+		  createMarker(results[i],i,2);
+	}
+  }
+}
+function callback3(results, status) {
+  //alert("OK3333333333333");
+  if (status === google.maps.places.PlacesServiceStatus.OK) {
+    for( var i = 0; i < results.length; i++){
+		check3(results[i],i);
+	}
+		for (var i = 0; i < results.length; i++) {
+		  createMarker(results[i],i,3);
 		}
-
-
-function createMarker(place,ind,w) {
+  }
+}
+		var minn = 9999999999999;
+		var ii = 0;
+		var iii = 0;
+  
+		function check1(place,index) {
+			 var l1 = place.geometry.location.lng();
+			 var l2 = place.geometry.location.lat();
+ var dist=Math.sqrt(((l1-pos.lng)*(l1-pos.lng))+((l2-pos.lat)*(l2-pos.lat)));
+        if(dist<minn){
+				minn=dist;
+				ii=index;
+        iii=1;
+			  }
+		}
+		
+		function check2(place,index) {
+			 var l1 = place.geometry.location.lng();
+			 var l2 = place.geometry.location.lat();
+ var dist=Math.sqrt(((l1-pos.lng)*(l1-pos.lng))+((l2-pos.lat)*(l2-pos.lat)));
+        if(dist<minn){
+				minn=dist;
+				ii=index;
+        iii=2;
+			  }
+		}
+		
+		function check3(place,index) {
+			 var l1 = place.geometry.location.lng();
+			 var l2 = place.geometry.location.lat();
+ var dist=Math.sqrt(((l1-pos.lng)*(l1-pos.lng))+((l2-pos.lat)*(l2-pos.lat)));
+        if(dist<minn){
+				minn=dist;
+				ii=index;
+        iii=3;
+			  }
+		}
+function createMarker(place,index,tri) {
 		  var image = 'https://www.google.com/maps/vt/icon/name=assets/icons/poi/tactile/pinlet_shadow-2-medium.png,assets/icons/poi/tactile/pinlet_outline-2-medium.png,assets/icons/poi/tactile/pinlet-2-medium.png,assets/icons/poi/quantum/pinlet/shoppingcart_pinlet-2-medium.png&highlight=ff000000,ffffff,db4437,ffffff&color=ff000000?scale=1g';
-if(ind===ii&&w===iii){
-    var placeLoc 
-    
-    
-    = place.geometry.location;
-    var marker = new google.maps.Marker({
-      map: map,
-      position: place.geometry.location,
-      icon: image
-    });
-    alert(ii);
+if(index===ii&&tri===iii){
+  var placeLoc = place.geometry.location;
+  var marker = new google.maps.Marker({
+    map: map,
+    position: place.geometry.location,
+	icon: image
+  });
 }
 else{
     var placeLoc = place.geometry.location;
@@ -168,15 +195,13 @@ else{
       position: place.geometry.location,
     });
 }
-
   google.maps.event.addListener(marker, 'click', function() {
     infowindow.setContent(place.name);
     infowindow.open(map, this);
   });
 }
     </script>
-    <div id="map"></div>
-<!-- Replace the value of the key parameter with your own API key. -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkUOdZ5y7hMm0yrcCQoCvLwzdM6M8s5qk&libraries=places&callback=initMap" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBVE-G6Gd6r8aQ9cisrmPLeYPUWWAY5Yk&libraries=places&callback=initMap" async defer></script>
+
   </body>
 </html>
